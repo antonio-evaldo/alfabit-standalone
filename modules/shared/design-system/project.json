@@ -5,5 +5,53 @@
   "prefix": "alfabit-standalone",
   "tags": [],
   "projectType": "library",
-  "targets": {}
+  "targets": {
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "modules/shared/design-system/.storybook",
+        "browserTarget": "design-system:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/design-system",
+        "configDir": "modules/shared/design-system/.storybook",
+        "browserTarget": "design-system:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c modules/shared/design-system/.storybook --url=http://localhost:4400"
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "design-system:build-storybook",
+        "staticFilePath": "dist/storybook/design-system"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "design-system:build-storybook:ci"
+        }
+      }
+    }
+  }
 }
